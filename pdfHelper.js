@@ -1,147 +1,132 @@
-const fs = require('fs');
-
-const taxPeriod = { 'GSTR3B': 'Monthly', 'GSTR1': 'Monthly', 'GSTR2X': 'Quaterly', 'GSTR9C': 'Annualy', 'GSTR9': 'Annualy', 'ITC04': 'Annualy/Half Yearly', 'GSTR2': 'Annualy/Half Yearly', 'TRAN3': 'Annualy/Half Yearly' }
-const gstRet = ['GSTR3B', 'GSTR1', 'GSTR2X', 'TRAN2', 'TRAN1']
-const Months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
-
-function generateHeader(doc) {
-    doc.image('logo.png', 50, 45, { width: 50 })
-        .fillColor('#444444')
-        .fontSize(20)
-        .text('CA Cloud Desk', 110, 57)
-        .fontSize(10)
-        .moveDown();
+const taxPeriod = {
+    'GSTR3B': 'Monthly',
+    'GSTR1': 'Monthly',
+    'GSTR2X': 'Quaterly',
+    'GSTR9C': 'Annualy',
+    'GSTR9': 'Annualy',
+    'ITC04': 'Annualy/Half Yearly',
 }
+const gstRet = ['GSTR3B', 'GSTR1', 'GSTR2X', 'TRAN2']
+const Months = ['JANUARY', 'FEBRUARY',
+    'MARCH',
+    'APRIL',
+    'MAY',
+    'JUNE',
+    'JULY',
+    'AUGUST',
+    'SEPTEMBER',
+    'OCTOBER',
+    'NOVEMBER',
+    'DECEMBER']
+const Content = (data,details) => {
+    
+    const tables = data ? Object.keys(data).map((key) => {
+        return `<div>
+        <div class="bg-[#1289a7] rounded-full px-3 py-2 text-white text-center w-64">
+        <p>GST Filling Details(${key})</p>
+        </div>
+        <table class="text-lg text-left rtl:text-right my-5">
+        <thead class="text-sm uppercase text-center">
+        <tr>
+        <th scope="col" class="px-2 py-3">
+        Tax Period
+        </th>
+        <th scope="col" class="px-2 py-3">
+        Date of Filing
+        </th>
+                            <th scope="col" class="px-2 py-3">
+                            Status
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-sm text-center">
+                        ${data[key].map((item) => {
+            return `
+                            <tr> 
+                            <td class="px-2 py-2">
+                            ${gstRet.includes(key) ? Months[parseInt(item.ret_prd.slice(0, 2)) - 1] : taxPeriod[key]}
+                            </td>
+                            <td class="px-2 py-2">
+                            ${item.dof}
+                            </td>
+                            <td class="px-2 py-2 ">
+                            ${item.status}
+                            </td>
+                            </tr>`
+        }).join('')
+            }
+                    
+                    </tbody>
+                </thead>
+                </table>
+                </div>
+                `
+    }) : [];
 
-function generateFooter(doc) {
-    doc.fontSize(
-        10,
-    ).text(
-        'Payment is due within 15 days. Thank you for your business.',
-        50,
-        730,
-        { align: 'center', width: 500 },
-    );
+    let file = {
+        content: `
+                <style>
+                .a4-div {
+                    width: 210mm;
+                    height: 297mm;
+                    background-image: url('https://devrunch.github.io/imageRepo/img1.png');
+                    background-repeat: repeat-y;
+                    background-size: cover;
+                }
+                
+                table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        </style>
+        <div class="a4-div">
+            <div style="width: 180mm; " class="py-5 px-4 pl-6">
+                <h1 class="text-left text-4xl font-bold">GST Filing and Compliance Report <br> (${details.prd})</h1>
+                <div class="rounded-xl mt-6 p-3 border-[3px] mr-2 border-[#53abc1]" style="background-color: #effcff; background-image: url('https://devrunch.github.io/imageRepo/img3.png'); background-repeat: no-repeat; background-size: contain; background-position: bottom;">
+                    <p class="py-1"><span class="font-bold">LEGAL NAME OF BUSINESS :</span> ${details.bsnm}</p>
+                    <p class="py-1"><span class="font-bold">ADDRESS : </span> ${details.address}</p>
+                    <p class="py-1"><span class="font-bold">TRADE NAME OF BUSINESS:</span> ${details.lgnm}</p>
+                    <p class="py-1"><span class="font-bold">CONSTITUTION OF BUSINESS :</span>${details.entityType}</p>
+                    <p class="py-1"><span class="font-bold">DEPARTMENT CODE :</span> ${details.departmentCode}</p>
+                    <p class="py-1"><span class="font-bold">NATURE OF BUSINESS :</span> ${details.natureOfBusiness}</p>
+                    <p class="py-1"><span class="font-bold">REGISTRATION TYPE :</span> ${details.registrationType}</p>
+                    <p class="py-1"><span class="font-bold">PINCODE :</span> ${details.pincode}</p>
+                    <p class="py-1"><span class="font-bold">PAN :</span> ${details.pan}</p>
+                    <p class="py-1"><span class="font-bold">REGISTRATION DATE :</span> ${details.registrationDate} </p>
+                </div>
+                <div class="mt-10 flex flex-wrap gap-x-3 gap-y-10 justify-around">
+                    ${data?tables[0] + tables[1]:''}
+                </div>
+            </div>
+        </div>
+    ${data ?`
+        <div class="a4-div">
+            <div style="width: 180mm; " class="py-5 px-3 pl-5">
+                <div class="mt-10 flex flex-wrap gap-x-3 gap-y-10 justify-around">
+                    ${data?tables.slice(1).join(""):``}
+                </div>
+            </div>
+        </div>`:`<div></div>`
+        }
+            <script src="https://cdn.tailwindcss.com"></script>
+`
+    };
+    return file;
 }
-function generateHr(doc, y) {
-    doc
-        .strokeColor("#aaaaaa")
-        .lineWidth(1)
-        .moveTo(50, y)
-        .lineTo(550, y)
-        .stroke()
-        .moveDown();
-}
-function generateCustomerInformation(doc, details) {
-    doc
-        .fillColor("#444444")
-        .fontSize(20)
-        .text("GST Information", 50, 130);
+module.exports = Content;
+// html_to_pdf.generatePdfs(file, options).then(output => {
 
-    generateHr(doc, 155);
+//     output.forEach(pdf => {
+//         const { name, buffer } = pdf;
+//         fs.writeFile(name, buffer, (err) => {
+//             if (err) {
+//                 console.error('Error saving PDF:', err);
+//                 return;
+//             }
+//             console.log('PDF saved successfully:', name);
+//         });
+//     });
 
-    const customerInformationTop = 200 - 30;
-    if (details.prd)
-        doc
-            .fontSize(10)
-            .text("BUSINESS NAME:", 50, customerInformationTop)
-            .font("Helvetica")
-            .text(details.bsnm, 150, customerInformationTop)
-            .font("Helvetica")
-            .text("Trade Name:", 300, customerInformationTop)
-            .text(details.lgnm, 400, customerInformationTop)
-            .text("PAN:", 50, customerInformationTop + 15)
-            .text(details.pan, 150, customerInformationTop + 15)
-            .text("Financial Year:", 300, customerInformationTop + 15)
-            .text(details.prd, 400, customerInformationTop + 15)
-            .text("ADDRESS:", 50, customerInformationTop + 30)
-            .text(details.address, 150, customerInformationTop + 30)
-            .font("Helvetica")
-            .text("Entity Type:", 50, customerInformationTop + 45)
-            .font("Helvetica")
-            .text(details.entityType, 150, customerInformationTop + 45)
-            .text("Nature of Business:", 300, customerInformationTop + 45)
-            .text(details.natureOfBusiness, 400, customerInformationTop + 45)
-            .text("Pincode:", 50, customerInformationTop + 60)
-            .text(details.pincode, 150, customerInformationTop + 60)
-            .text("Department Code:", 300, customerInformationTop + 60)
-            .text(details.departmentCode, 400, customerInformationTop + 60)
-            .text("Registration Type:", 50, customerInformationTop + 75)
-            .text(details.registrationType, 150, customerInformationTop + 75)
-            .text("Registration Date:", 300, customerInformationTop + 75)
-            .text(details.registrationDate, 400, customerInformationTop + 75)
-            .moveDown();
-    else
-        doc
-            .fontSize(10)
-            .text("Business Name:", 50, customerInformationTop)
-            .font("Helvetica")
-            .text(details.bsnm, 150, customerInformationTop)
-            .font("Helvetica")
-            .text("Trade Name:", 300, customerInformationTop)
-            .text(details.lgnm, 400, customerInformationTop)
-            .text("PAN:", 50, customerInformationTop + 15)
-            .text(details.pan, 150, customerInformationTop + 15)
-            .text("Address:", 50, customerInformationTop + 30)
-            .text(details.address, 150, customerInformationTop + 30)
-            .font("Helvetica")
-            .text("Entity Type:", 50, customerInformationTop + 45)
-            .font("Helvetica")
-            .text(details.entityType, 150, customerInformationTop + 45)
-            .text("Nature of Business:", 300, customerInformationTop + 45)
-            .text(details.natureOfBusiness, 400, customerInformationTop + 45)
-            .text("Pincode:", 50, customerInformationTop + 60)
-            .text(details.pincode, 150, customerInformationTop + 60)
-            .text("Department Code:", 300, customerInformationTop + 60)
-            .text(details.departmentCode, 400, customerInformationTop + 60)
-            .text("Registration Type:", 50, customerInformationTop + 75)
-            .text(details.registrationType, 150, customerInformationTop + 75)
-            .text("Registration Date:", 300, customerInformationTop + 75)
-            .text(details.registrationDate, 400, customerInformationTop + 75)
-            .moveDown();
-
-    generateHr(doc, 252 + 10);
-}
-function generateTables(doc, filling) {
-    let s = 0;
-    let types = Object.keys(filling);
-    Object.keys(filling).forEach((key) => {
-        doc.fontSize(20).text(key).moveDown();
-        const tableArray = {
-            headers: [
-                { label: "Tax Period", property: 'ret_prd', width: 120, renderer: (value, indexColumn, indexRow, row) => gstRet.includes(key) ? Months[parseInt(value.slice(0, 2)) - 1] : taxPeriod[key] },
-                { label: "Date of Filing", property: 'dof', width: 120, renderer: null },
-                { label: "Status", property: 'status', width: 120, renderer: null },
-            ],
-            datas:
-                filling[key]
-            ,
-        };
-        doc.table(tableArray, {
-            prepareHeader: () => doc.font("Helvetica-Bold").fontSize(14),
-            prepareRow: (row, indexColumn, indexRow, rectRow) => doc.font("Helvetica").fontSize(12),
-        });
-    })
-
-    doc.moveDown(); // separate tables
-
-
-}
-function createInvoice(doc, details, filing) {
-    generateHeader(doc); // Invoke `generateHeader` function.
-    if (details)
-        generateCustomerInformation(doc, details); // Invoke `generateCustomerInformation` function.
-    if (filing) {
-        doc
-            .fillColor("#444444")
-            .fontSize(20)
-            .text("GST Filing Information", 50, 260 + 10)
-            .moveDown();
-        generateTables(doc, filing);
-    }
-    doc.end();
-}
-
-module.exports = {
-    createInvoice,
-};
+// });
