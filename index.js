@@ -20,12 +20,7 @@ aws.config.update({
 })
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'lyla2@ethereal.email',
-        pass: 'Y8MkYbdtWmmkxpEPHs'
-    }
+    SES: new aws.SES({ apiVersion: '2010-12-01' })
 });
 app.get('/', (req, res) => {
     res.send('GET request to the homepage')
