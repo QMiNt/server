@@ -71,6 +71,7 @@ app.post('/send-email', async (req, res) => {
             res.status(500).send({ message: 'Error sending email' });
         } else {
             console.log('Email sent: ');
+            console.log(info)
             res.status(200).send({ message: 'Email sent successfully', info: info.messageId });
         }
     });
