@@ -21,7 +21,7 @@ const Months = ['JANUARY', 'FEBRUARY',
 const Content = (data,details) => {
     
     const tables = data ? Object.keys(data).map((key) => {
-        return `<div class='w[48%]'>
+        return `<div class='w[45%]'>
         <div class="bg-[#1289a7] rounded-full px-3 py-2 text-white text-center w-64">
         <p>GST Filling Details(${key})</p>
         </div>
@@ -62,7 +62,6 @@ const Content = (data,details) => {
                 </div>
                 `
     }) : [];
-
     let file = {
         content: `
                 <style>
@@ -101,14 +100,14 @@ const Content = (data,details) => {
                 </div>
             </div>
         </div>
-    ${data.length > 2 ?`
+    ${data?(tables.length > 2 ?`
         <div class="a4-div">
             <div style="width: 180mm; " class="py-5 px-3 pl-5">
                 <div class="mt-10 flex flex-wrap gap-x-3 gap-y-10 justify-around">
                     ${data?tables.slice(2).join(""):``}
                 </div>
             </div>
-        </div>`:`<div></div>`
+        </div>`:`<div></div>`):''
         }
             <script src="https://cdn.tailwindcss.com"></script>
 `
@@ -117,16 +116,3 @@ const Content = (data,details) => {
 }
 module.exports = Content;
 // html_to_pdf.generatePdfs(file, options).then(output => {
-
-//     output.forEach(pdf => {
-//         const { name, buffer } = pdf;
-//         fs.writeFile(name, buffer, (err) => {
-//             if (err) {
-//                 console.error('Error saving PDF:', err);
-//                 return;
-//             }
-//             console.log('PDF saved successfully:', name);
-//         });
-//     });
-
-// });

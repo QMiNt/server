@@ -1,40 +1,4 @@
-const express = require('express')
-const nodemailer = require('nodemailer');
-const aws = require('aws-sdk');
-const dotenv = require('dotenv');
-const Content = require('./pdfHelper.js');
-const html_to_pdf = require('html-pdf-node');
-let options = { format: 'A4', printBackground: true, pageRanges: '1-2' };
-dotenv.config();
-const cors = require('cors');
-const app = express()
-const port = 3000
-app.use(cors());
-app.use(express.json());
-aws.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
-})
-
-const transporter = nodemailer.createTransport({
-    SES: new aws.SES({ apiVersion: '2010-12-01' })
-});
-app.get('/', (req, res) => {
-    res.send('GET request to the homepage')
-})
-// Endpoint to send email
-app.post('/send-api', async (req, res) => {
-
-    const { email, details, filling } = req.body;
-    if (!email) {
-        res.status(400).send({ message: 'Email is required' });
-    }
-    if (!details) {
-        res.status(400).send({ message: 'Details is required' });
-    }
-    const html = `
-    <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -138,7 +102,7 @@ app.post('/send-api', async (req, res) => {
                 
                 <p style="font-size: 18px;font-family: 'Helvetica', Arial, sans-serif; font-weight: 400; text-decoration: none;text-align: left;">
                     Hey,<br/>
-                    Thank you for using the CA Cloud Desk FREE GST Details tool. You can download the requested GST filing information for GST number ${details.gstin} from the attachment in this email.
+                    Thank you for using the CA Cloud Desk FREE GST Details tool. You can download the requested GST filing information for GST number ${GST NUMBER} from the attachment in this email.
                 </p>
 
                 <p style="font-size: 18px;font-family: 'Helvetica', Arial, sans-serif; font-weight: 400; text-decoration: none;text-align: left;">
@@ -207,36 +171,3 @@ app.post('/send-api', async (req, res) => {
 </body>
 
 </html>
-    `
-    let out;
-    await html_to_pdf.generatePdf(Content(filling, details), options).then(output => {
-        out = output;
-    });
-    const mailOptions = {
-        from: 'noreply@lawseva.co.in ',
-        to: email,
-        subject: `GST Filing Details PDF ready to download`,
-        html: html,
-        attachments: [
-            {
-                filename: 'Gst Filing Details.pdf',
-                content: out,
-                contentType: 'application/pdf',
-            },
-        ],
-    };
-
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-
-            res.status(500).send({ message: 'Error sending email' });
-        } else {
-            res.status(200).send({ message: 'Email sent successfully', info: info.messageId });
-        }
-    });
-});
-
-app.get('/', (req, res) => res.send('Hello World!'));
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
