@@ -4,6 +4,7 @@ const aws = require('aws-sdk');
 const dotenv = require('dotenv');
 const Content = require('./pdfHelper.js');
 const html_to_pdf = require('html-pdf-node');
+const gstRouter = require('./routes/gstDetailsRoute');
 let options = { format: 'A4', printBackground: true, pageRanges: '1-2' };
 dotenv.config();
 const cors = require('cors');
@@ -16,7 +17,7 @@ aws.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.AWS_REGION
 })
-
+app.use('/gst', gstRouter);
 const transporter = nodemailer.createTransport({
     SES: new aws.SES({ apiVersion: '2010-12-01' })
 });
@@ -147,7 +148,7 @@ app.post('/send-api', async (req, res) => {
                 
                 
                 <!-- Start button (You can change the background colour by the hex code below) -->
-                <a href="https://partner.caclouddesk.com/" target="_blank"
+                <a href="https://demo.caclouddesk.com/" target="_blank"
                 style="background-color: #6751c0; font-size: 18px; font-family: 'Helvetica', Arial, sans-serif; font-weight: normal; text-decoration: none; padding: 12px 25px; color: #ffffff; border-radius: 35px; display: inline-block; mso-padding-alt: 0;">
                     <!--[if mso]>
                     <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 30pt;">&nbsp;</i>
