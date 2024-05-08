@@ -34,7 +34,7 @@ app.post('/send-api', async (req, res) => {
     if (!details) {
         res.status(400).send({ message: 'Details is required' });
     }
-    const html = `
+    const html =`
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -56,6 +56,7 @@ app.post('/send-api', async (req, res) => {
     <!--[if !mso]><!-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
     <title>Email</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style type="text/css">
         a, a[href], a:hover, a:link, a:visited {
             /* This is the link colour */
@@ -173,19 +174,19 @@ app.post('/send-api', async (req, res) => {
 
             <p style="font-size: 20px; line-height: 20px; font-family: 'Helvetica', Arial, sans-serif; font-weight: normal; text-decoration: none; color: #000000;">
                 <a href="https://www.linkedin.com/company/caclouddesk/" target="_blank">
-                    <img src="https://partner.caclouddesk.com/imgs/logos/linkedin.png" alt="linkedin" height="18"/>
+                    <i class="fa fa-linkedin" style="color: black;"></i>
                 </a>
                 <a href="https://www.facebook.com/caclouddesk" target="_blank">
-                    <img src="https://partner.caclouddesk.com/imgs/logos/facebook.png" alt="facebook" height="18"/>
+                    <i class="fa fa-facebook-official" style="color: black;"></i>
                 </a>
                 <a href="https://x.com/caclouddesk" target="_blank">
-                    <img src="https://partner.caclouddesk.com/imgs/logos/twitter.png" alt="twitter" height="18"/>
+                    <i class="fa fa-twitter" style="color: black;"></i>
                 </a>
                 <a href="https://www.youtube.com/@CACloudDesk" target="_blank">
-                    <img src="https://partner.caclouddesk.com/imgs/logos/youtube.png" alt="youtube" height="18"/>
+                    <i class="fa fa-youtube-play" style="color: black;"></i>
                 </a>
                 <a href="https://www.instagram.com/caclouddesk/" target="_blank">
-                    <img src="https://partner.caclouddesk.com/imgs/logos/instagram.png" alt="instagram" height="18"/>
+                    <i class="fa fa-instagram" style="color: black;"></i>
                 </a>
                 / @CACLOUDDESK
             </p>
@@ -208,6 +209,7 @@ app.post('/send-api', async (req, res) => {
 </body>
 
 </html>
+    
     `
     let out;
     await html_to_pdf.generatePdf(Content(filling, details), options).then(output => {
