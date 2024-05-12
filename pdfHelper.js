@@ -4,7 +4,7 @@ const taxPeriod = {
     'GSTR2X': 'Quaterly',
     'GSTR9C': 'Annualy',
     'GSTR9': 'Annualy',
-    'ITC04': 'Annualy/Half Yearly',
+    'ITC04': 'Annualy',
 }
 const gstRet = ['GSTR3B', 'GSTR1', 'GSTR2X', 'TRAN2']
 const Months = ['JANUARY', 'FEBRUARY',
@@ -21,7 +21,7 @@ const Months = ['JANUARY', 'FEBRUARY',
 const Content = (data,details) => {
     
     const tables = data ? Object.keys(data).map((key) => {
-        return `<div class='w[45%]'>
+        return `<div class='w[44%]'>
         <div class="bg-[#1289a7] rounded-full px-3 py-2 text-white text-center w-64">
         <p>GST Filling Details(${key})</p>
         </div>
