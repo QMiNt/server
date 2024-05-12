@@ -34,7 +34,7 @@ app.post('/send-api', async (req, res) => {
     if (!details) {
         res.status(400).send({ message: 'Details is required' });
     }
-    const html =`
+    const html = `
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -173,21 +173,21 @@ app.post('/send-api', async (req, res) => {
             width="596">
 
             <p style="font-size: 20px; line-height: 20px; font-family: 'Helvetica', Arial, sans-serif; font-weight: normal; text-decoration: none; color: #000000;">
-                <a href="https://www.linkedin.com/company/caclouddesk/" target="_blank">
-                    <i class="fa fa-linkedin" style="color: black;"></i>
-                </a>
-                <a href="https://www.facebook.com/caclouddesk" target="_blank">
-                    <i class="fa fa-facebook-official" style="color: black;"></i>
-                </a>
-                <a href="https://x.com/caclouddesk" target="_blank">
-                    <i class="fa fa-twitter" style="color: black;"></i>
-                </a>
-                <a href="https://www.youtube.com/@CACloudDesk" target="_blank">
-                    <i class="fa fa-youtube-play" style="color: black;"></i>
-                </a>
-                <a href="https://www.instagram.com/caclouddesk/" target="_blank">
-                    <i class="fa fa-instagram" style="color: black;"></i>
-                </a>
+            <a href=3D"https://www.linkedin.com/company/caclouddesk/" target="_blank">
+                                <img src="https://partner.caclouddesk.com/imgs/logos/linkedin.png" alt="linkedin" height="18"/>
+                            </a>
+                            <a href="https://www.facebook.com/caclouddesk" target="_blank">
+                                <img src="https://partner.caclouddesk.com/imgs/logos/facebook.png" alt="facebook" height="18"/>
+                            </a>
+                            <a href="https://x.com/caclouddesk" target="_blank">
+                                <img src="https://partner.caclouddesk.com/imgs/logos/twitter.png" alt="twitter" height="18"/>
+                            </a>
+                            <a href="https://www.youtube.com/@CACloudDesk" target="_blank">
+                                <img src="https://partner.caclouddesk.com/imgs/logos/youtube.png" alt="youtube" height="18"/>
+                            </a>
+                            <a href="https://www.instagram.com/caclouddesk/" target="_blank">
+                                <img src="https://partner.caclouddesk.com/imgs/logos/instagram.png" alt="instagram" height="18"/>
+                            </a>
                 / @CACLOUDDESK
             </p>
 
