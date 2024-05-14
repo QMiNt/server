@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const express = require('express')
 const nodemailer = require('nodemailer');
 const aws = require('aws-sdk');
@@ -12,6 +13,14 @@ const app = express()
 const port = 3000
 app.use(cors());
 app.use(express.json());
+
+mongoose.Promise = global.Promise;
+
+// Connect MongoDB at default port 27017.
+mongoose.connect('mongodb+srv://Qmint:cbw5vkGikN7DUYNx@cluster0.idytieh.mongodb.net/lawseva', {
+    useNewUrlParser: true,
+});
+const collection = mongoose.connection.collection('emails');
 aws.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -34,6 +43,17 @@ app.post('/send-api', async (req, res) => {
     if (!details) {
         res.status(400).send({ message: 'Details is required' });
     }
+    const existingGst = await collection.findOne({ email, details });
+    if (!existingGst)
+    collection.insertOne({ email, details }, (error, result) => {
+        if (error) {
+            console.log(error)
+        } else {
+            const insertedId = result.insertedId;
+            console.log('Inserted document with ID:', insertedId);
+        }
+    });
+
     const html = `
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -215,6 +235,7 @@ app.post('/send-api', async (req, res) => {
     await html_to_pdf.generatePdf(Content(filling, details), options).then(output => {
         out = output;
     });
+    
     const mailOptions = {
         from: 'noreply@lawseva.co.in ',
         to: email,

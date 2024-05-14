@@ -22,11 +22,11 @@ const Content = (data,details) => {
     
     const tables = data ? Object.keys(data).map((key) => {
         return `<div class='w[44%]'>
-        <div class="bg-[#1289a7] rounded-full px-3 py-2 text-white text-center w-64">
+        <div class="bg-[#1289a7] rounded-full px-2 py-2 text-white text-sm text-center">
         <p>GST Filling Details(${key})</p>
         </div>
         <table class="text-lg text-left rtl:text-right my-5">
-        <thead class="text-sm uppercase text-center">
+        <thead class="text-[13px] uppercase text-center">
         <tr>
         <th scope="col" class="px-2 py-3">
         Tax Period
@@ -42,20 +42,20 @@ const Content = (data,details) => {
                         <tbody class="text-sm text-center">
                         ${data[key].map((item) => {
             return `
-                            <tr> 
-                            <td class="px-2 py-2">
+                            <tr>
+                            <td class="px-2 py-1">
                             ${gstRet.includes(key) ? Months[parseInt(item.ret_prd.slice(0, 2)) - 1] : taxPeriod[key]}
                             </td>
-                            <td class="px-2 py-2">
+                            <td class="px-2 py-1">
                             ${item.dof}
                             </td>
-                            <td class="px-2 py-2 ">
+                            <td class="px-2 py-1">
                             ${item.status}
                             </td>
                             </tr>`
         }).join('')
             }
-                    
+
                     </tbody>
                 </thead>
                 </table>
@@ -95,7 +95,7 @@ const Content = (data,details) => {
                     <p class="py-1"><span class="font-bold">PAN :</span> ${details.pan}</p>
                     <p class="py-1"><span class="font-bold">REGISTRATION DATE :</span> ${details.registrationDate} </p>
                 </div>
-                <div class="mt-10 flex flex-wrap gap-x-3 gap-y-10 justify-around">
+                <div class="mt-10 flex flex-wrap gap-y-10 justify-around">
                     ${data?tables[0] + tables[1]:''}
                 </div>
             </div>
@@ -103,7 +103,7 @@ const Content = (data,details) => {
     ${data?(tables.length > 2 ?`
         <div class="a4-div">
             <div style="width: 180mm; " class="py-5 px-3 pl-5">
-                <div class="mt-10 flex flex-wrap gap-x-3 gap-y-10 justify-around">
+                <div class="mt-10 flex flex-wrap gap-y-10 justify-around">
                     ${data?tables.slice(2).join(""):``}
                 </div>
             </div>

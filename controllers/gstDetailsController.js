@@ -20,12 +20,12 @@ const gstUser = async (req, res) => {
             }]
         });
 
-        const url = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.SITE_KEY}&response=${token}`;
-        const google_response = await fetch(url, { method: 'POST' }).then(response => response.json());
-        console.log(google_response)
-        if (google_response.success == false || google_response.score < 0.4) {
-            return res.status(400).json({ message: "Invalid Captcha" });
-        }
+        // const url = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.SITE_KEY}&response=${token}`;
+        // const google_response = await fetch(url, { method: 'POST' }).then(response => response.json());
+        // console.log(google_response)
+        // if (google_response.success == false || google_response.score < 0.4) {
+        //     return res.status(400).json({ message: "Invalid Captcha" });
+        // }
 
         const requestOptions = {
             method: "POST",
